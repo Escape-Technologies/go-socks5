@@ -1,0 +1,25 @@
+name: Go proxy
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  goproxy:
+    name: Verify module on proxy.golang.org
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+
+      - name: Check module on GOPROXY
+        run: |
+          new_version=$(tr -d '[:space:]' < version.txt)
+          GOPROXY=proxy.golang.org go list -m "github.com/Escape-Technologies/go-socks5@v${new_version}"

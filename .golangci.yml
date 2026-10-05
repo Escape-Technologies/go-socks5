@@ -1,0 +1,22 @@
+---
+version: "2"
+linters:
+  enable:
+    # https://golangci-lint.run/usage/linters/#disabled-by-default
+    - gocyclo # Computes and checks the cyclomatic complexity of functions.
+    - mnd # An analyzer to detect magic numbers.
+    - revive # Fast, configurable, extensible, flexible, and beautiful linter for Go. Drop-in replacement of golint.
+    - bodyclose # Checks whether HTTP response body is closed successfully.
+    - durationcheck
+    - containedctx
+    - perfsprint
+    - protogetter
+    - spancheck
+    - sloglint
+    - noctx
+    - exhaustive
+    - contextcheck
+    - whitespace
+    - wrapcheck
+run:
+  timeout: 5m
