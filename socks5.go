@@ -6,6 +6,7 @@ import (
 	"log"
 	"net"
 	"os"
+	"time"
 
 	"golang.org/x/net/context"
 )
@@ -48,6 +49,10 @@ type Config struct {
 
 	// Optional function for dialing out
 	Dial func(ctx context.Context, network, addr string) (net.Conn, error)
+
+	// UDPTimeout is the idle timeout for ASSOCIATE far-end UDP sockets.
+	// Zero means 30s.
+	UDPTimeout time.Duration
 }
 
 // Server is reponsible for accepting connections and handling
