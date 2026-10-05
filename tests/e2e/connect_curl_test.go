@@ -22,7 +22,8 @@ const (
 	listenAddr   = "127.0.0.1:0"
 	curlTimeout  = 5 * time.Second
 	demoHeader   = "X-Demo: " + demoToken
-	socksGranted = "SOCKS5 request granted"
+	socksGrantedOld = "SOCKS5 request granted"
+	socksGrantedNew = "Opened SOCKS connection"
 )
 
 func TestE2E_CurlThroughSOCKS5(t *testing.T) {
@@ -54,8 +55,8 @@ func TestE2E_CurlThroughSOCKS5(t *testing.T) {
 	}
 
 	verbose := runCurl(t, "-sS", "-v", "--socks5", socksAddr, url)
-	if !strings.Contains(verbose.stderr, socksGranted) {
-		t.Fatalf("missing %q in curl stderr: %q", socksGranted, verbose.stderr)
+	if !strings.Contains(verbose.stderr, socksGrantedOld) && !strings.Contains(verbose.stderr, socksGrantedNew) {
+		t.Fatalf("curl did not confirm SOCKS CONNECT: %q", verbose.stderr)
 	}
 	if verbose.stdout != direct.stdout {
 		t.Fatalf("verbose proxy mismatch: direct=%q proxied=%q", direct.stdout, verbose.stdout)
