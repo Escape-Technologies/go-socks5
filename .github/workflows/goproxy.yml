@@ -11,11 +11,11 @@ permissions:
 jobs:
   goproxy:
     name: Verify module on proxy.golang.org
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
-      - uses: actions/setup-go@v5
+      - uses: actions/setup-go@v6
         with:
           go-version-file: go.mod
 
