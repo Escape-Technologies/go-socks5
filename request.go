@@ -232,7 +232,8 @@ func (s *Server) handleBind(ctx context.Context, conn conn, req *Request) error 
 	return nil
 }
 
-// handleAssociate is used to handle a connect command
+// handleAssociate is used to handle a UDP ASSOCIATE command.
+// Datagrams are framed on the TCP control connection.
 func (s *Server) handleAssociate(ctx context.Context, conn conn, req *Request) error {
 	// Check if this is allowed
 	if ctx_, ok := s.config.Rules.Allow(ctx, req); !ok {
@@ -244,11 +245,16 @@ func (s *Server) handleAssociate(ctx context.Context, conn conn, req *Request) e
 		ctx = ctx_
 	}
 
-	// TODO: Support associate
-	if err := sendReply(conn, commandNotSupported, nil); err != nil {
+	bindIP := s.config.BindIP
+	if bindIP == nil {
+		bindIP = net.IPv4zero
+	}
+	bind := AddrSpec{IP: bindIP, Port: 0}
+	if err := sendReply(conn, successReply, &bind); err != nil {
 		return fmt.Errorf("Failed to send reply: %v", err)
 	}
-	return nil
+
+	return s.relayAssociate(ctx, conn, req)
 }
 
 // readAddrSpec is used to read AddrSpec.
